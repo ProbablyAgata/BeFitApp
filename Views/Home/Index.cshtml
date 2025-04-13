@@ -1,0 +1,198 @@
+﻿@{
+    ViewData["Title"] = "BeFit - Twój osobisty asystent treningowy";
+}
+
+<div class="hero-section text-center py-5">
+    <div class="container">
+        <div class="hero-content">
+            <i class="bi bi-heart-pulse display-1 mb-4 text-white"></i>
+            <h1 class="display-4 mb-4 text-white fw-bold">Witaj w BeFit</h1>
+            <p class="lead mb-4 text-white fw-light">Twój osobisty asystent treningowy, który pomoże Ci osiągnąć cele fitness</p>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <div class="mt-4">
+                    <a asp-area="Identity" asp-page="/Account/Register" class="gradient-button btn-lg me-3">
+                        <i class="bi bi-person-plus"></i> Rozpocznij za darmo
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> Zaloguj się
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="container mt-5">
+        <div class="row g-4">
+            <div class="col-md-8">
+                <div class="card dashboard-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-calendar-check"></i> Ostatnie sesje treningowe</h5>
+                        <a asp-controller="TrainingSessions" asp-action="Create" class="btn btn-lg w-40">
+                                    <i class="bi bi-plus-lg me-2"></i> Dodaj nową sesję
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        @if (ViewBag.RecentSessions != null && ViewBag.RecentSessions.Count > 0)
+                        {
+                            <div class="list-group">
+                                @foreach (var session in ViewBag.RecentSessions)
+                                {
+                                    <a href="@Url.Action("Details", "TrainingSessions", new { id = session.Id })" 
+                                       class="list-group-item list-group-item-action session-item">
+                                        <div class="d-flex w-100 justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1">
+                                                    <i class="bi bi-stopwatch text-primary"></i> Sesja treningowa
+                                                </h6>
+                                                <p class="mb-1 text-muted">
+                                                    <i class="bi bi-clock"></i> @session.StartTime.ToString("HH:mm") - @session.EndTime?.ToString("HH:mm")
+                                                </p>
+                                            </div>
+                                            <span class="session-date">
+                                                <i class="bi bi-calendar2"></i> @session.StartTime.ToString("dd.MM.yyyy")
+                                            </span>
+                                        </div>
+                                    </a>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center my-5">
+                                <i class="bi bi-emoji-smile display-4 text-muted mb-3"></i>
+                                <p class="text-muted">Nie masz jeszcze żadnych sesji treningowych.</p>
+                                <p class="text-muted">Rozpocznij swoją przygodę fitness już teraz!</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-lightning-charge"></i> Szybkie akcje</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column gap-4">
+                            <div class="quick-action">
+                                <a asp-controller="TrainingSessions" asp-action="Create" class="btn btn-lg w-100">
+                                    <i class="bi bi-plus-lg me-2"></i> Nowa sesja treningowa
+                                </a>
+                            </div>
+                            
+                            <div class="quick-action">
+                                <a asp-controller="TrainingSessions" asp-action="Index" class="btn btn-lg w-100">
+                                    <i class="bi bi-list-check me-2"></i> Wszystkie sesje
+                                </a>
+                            </div>
+                            
+                            <div class="quick-action">
+                                <a asp-controller="ExerciseTypes" asp-action="Index" class="btn btn-lg w-100">
+                                    <i class="bi bi-activity me-2"></i> Typy ćwiczeń
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container mt-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card text-center p-4">
+                    <i class="bi bi-calendar-check feature-icon"></i>
+                    <h3 class="mt-4">Planuj treningi</h3>
+                    <p>Łatwo planuj i śledź swoje sesje treningowe. Ustal cele i monitoruj postępy.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center p-4">
+                    <i class="bi bi-graph-up feature-icon"></i>
+                    <h3 class="mt-4">Śledź postępy</h3>
+                    <p>Monitoruj swoje osiągnięcia i analizuj wyniki treningów w czasie.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center p-4">
+                    <i class="bi bi-trophy feature-icon"></i>
+                    <h3 class="mt-4">Osiągaj cele</h3>
+                    <p>Wyznaczaj cele i systematycznie do nich dąż z naszym wsparciem.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .hero-section {
+        background: var(--primary-gradient);
+        padding: 100px 0;
+        margin-top: -24px;
+        margin-bottom: 40px;
+        border-radius: 0 0 30px 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .hero-content .display-4 {
+        font-weight: 700;
+        letter-spacing: -1px;
+    }
+
+    .hero-content .lead {
+        font-size: 1.3rem;
+        font-weight: 300;
+        letter-spacing: -0.2px;
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .session-item {
+        border: none;
+        border-radius: var(--border-radius);
+        margin-bottom: 0.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .session-item:hover {
+        background-color: rgba(var(--primary-color-rgb), 0.05);
+        transform: translateX(5px);
+    }
+
+    .session-date {
+        background-color: rgba(var(--primary-color-rgb), 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        font-size: 0.9rem;
+    }
+
+    .quick-action {
+        transition: transform 0.3s ease;
+    }
+
+    .quick-action:hover {
+        transform: translateY(-5px);
+    }
+
+    .quick-action p {
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+</style>

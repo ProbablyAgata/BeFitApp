@@ -1,0 +1,59 @@
+@model BeFit.Models.PerformedExercise
+
+@{
+    ViewData["Title"] = "Szczegóły ćwiczenia";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="bi bi-info-circle"></i> Szczegóły ćwiczenia
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="bi bi-activity me-2"></i>Typ ćwiczenia
+                        </dt>
+                        <dd class="col-sm-8">@Model.ExerciseType.Name</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="bi bi-calendar-event me-2"></i>Data treningu
+                        </dt>
+                        <dd class="col-sm-8">@Model.TrainingSession.StartTime.ToString("dd.MM.yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="bi bi-bar-chart me-2"></i>Obciążenie
+                        </dt>
+                        <dd class="col-sm-8">@Model.Weight kg</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="bi bi-layers me-2"></i>Liczba serii
+                        </dt>
+                        <dd class="col-sm-8">@Model.Series</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="bi bi-arrow-repeat me-2"></i>Liczba powtórzeń
+                        </dt>
+                        <dd class="col-sm-8">@Model.Repetitions</dd>
+                    </dl>
+
+                    <div class="mt-4">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                            <i class="bi bi-pencil me-2"></i>Edytuj
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                            <i class="bi bi-trash me-2"></i>Usuń
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Powrót
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

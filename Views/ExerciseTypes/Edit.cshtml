@@ -1,0 +1,91 @@
+@model BeFit.Models.ExerciseType
+
+@{
+    ViewData["Title"] = "Edytuj typ ćwiczenia";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="bi bi-pencil"></i> Edytuj typ ćwiczenia
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group mb-3">
+                            <label asp-for="Name" class="form-label">
+                                <i class="bi bi-activity me-2"></i>Nazwa
+                            </label>
+                            <input asp-for="Name" class="form-control" required />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <div class="invalid-feedback">Proszę podać nazwę ćwiczenia.</div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                <i class="bi bi-save me-2"></i>Zapisz zmiany
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Powrót do listy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .card-header {
+        border-bottom: none;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .gradient-button {
+        background: linear-gradient(90deg, #28a745 0%, #85e085 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+    .gradient-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+        color: white;
+    }
+
+    .gradient-button-secondary {
+        background: linear-gradient(90deg, #6c757d 0%, #868e96 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+    .gradient-button-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2);
+        color: white;
+    }
+</style>

@@ -1,0 +1,30 @@
+@model IEnumerable<BeFit.Controllers.ExerciseStatViewModel>
+@{
+    ViewData["Title"] = "Twoje statystyki";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nazwa ćwiczenia</th>
+            <th>Liczba wykonań</th>
+            <th>Łączna liczba powtórzeń</th>
+            <th>Średnie obciążenie</th>
+            <th>Maksymalne obciążenie</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var stat in Model)
+        {
+            <tr>
+                <td>@stat.ExerciseName</td>
+                <td>@stat.Count</td>
+                <td>@stat.TotalRepetitions</td>
+                <td>@stat.AverageWeight.ToString("F1") kg</td>
+                <td>@stat.MaxWeight kg</td>
+            </tr>
+        }
+    </tbody>
+</table>

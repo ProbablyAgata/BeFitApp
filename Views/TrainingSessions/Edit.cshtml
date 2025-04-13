@@ -1,0 +1,102 @@
+@model BeFit.Models.TrainingSession
+
+@{
+    ViewData["Title"] = "Edytuj sesję treningową";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="bi bi-pencil"></i> Edytuj sesję treningową
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group mb-3">
+                            <label asp-for="StartTime" class="form-label">
+                                <i class="bi bi-calendar-event me-2"></i>Data rozpoczęcia
+                            </label>
+                            <input asp-for="StartTime" class="form-control" type="datetime-local" required />
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+                            <div class="invalid-feedback">Proszę podać datę rozpoczęcia.</div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="EndTime" class="form-label">
+                                <i class="bi bi-calendar-event me-2"></i>Data zakończenia
+                            </label>
+                            <input asp-for="EndTime" class="form-control" type="datetime-local" required />
+                            <span asp-validation-for="EndTime" class="text-danger"></span>
+                            <div class="invalid-feedback">Proszę podać datę zakończenia.</div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                <i class="bi bi-save me-2"></i>Zapisz zmiany
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Powrót do listy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .card-header {
+        border-bottom: none;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .gradient-button {
+        background: linear-gradient(90deg, #28a745 0%, #85e085 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+    .gradient-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+        color: white;
+    }
+
+    .gradient-button-secondary {
+        background: linear-gradient(90deg, #6c757d 0%, #868e96 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+    .gradient-button-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2);
+        color: white;
+    }
+</style>

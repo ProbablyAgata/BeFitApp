@@ -1,0 +1,71 @@
+@model BeFit.Models.PerformedExercise
+
+@{
+    ViewData["Title"] = "Usuń ćwiczenie";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-exclamation-triangle"></i> Usuń ćwiczenie
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="text-danger mb-4">Czy na pewno chcesz usunąć to ćwiczenie?</h3>
+
+                    <dl class="row">
+                        <dt class="col-sm-4">Typ ćwiczenia</dt>
+                        <dd class="col-sm-8">@Model.ExerciseType.Name</dd>
+
+                        <dt class="col-sm-4">Data treningu</dt>
+                        <dd class="col-sm-8">@Model.TrainingSession.StartTime.ToString("dd.MM.yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-4">Obciążenie</dt>
+                        <dd class="col-sm-8">@Model.Weight kg</dd>
+
+                        <dt class="col-sm-4">Liczba serii</dt>
+                        <dd class="col-sm-8">@Model.Series</dd>
+
+                        <dt class="col-sm-4">Liczba powtórzeń</dt>
+                        <dd class="col-sm-8">@Model.Repetitions</dd>
+                    </dl>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Usuń
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Powrót
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .card-header {
+        border-bottom: none;
+    }
+
+    dt {
+        font-weight: 500;
+        color: #6c757d;
+    }
+
+    dd {
+        margin-bottom: 1rem;
+    }
+</style>

@@ -1,0 +1,174 @@
+@model BeFit.Models.PerformedExercise
+
+@{
+    ViewData["Title"] = "Edytuj ćwiczenie";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="bi bi-pencil"></i> Edytuj ćwiczenie
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger" style="display: none;" id="errorAlert"></div>
+                    <form id="editForm" asp-action="Edit" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="ExerciseTypeId" class="form-label">
+                                <i class="bi bi-activity me-2"></i>Rodzaj ćwiczenia
+                            </label>
+                            <select asp-for="ExerciseTypeId" class="form-select" asp-items="ViewBag.ExerciseTypeId" required>
+                                <option value="">Wybierz rodzaj ćwiczenia</option>
+                            </select>
+                            <span asp-validation-for="ExerciseTypeId" class="text-danger"></span>
+                            <div class="invalid-feedback">Proszę wybrać rodzaj ćwiczenia.</div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="TrainingSessionId" class="form-label">
+                                <i class="bi bi-calendar-event me-2"></i>Sesja treningowa
+                            </label>
+                            <select asp-for="TrainingSessionId" class="form-select" asp-items="ViewBag.TrainingSessionId" required>
+                                <option value="">Wybierz sesję treningową</option>
+                            </select>
+                            <span asp-validation-for="TrainingSessionId" class="text-danger"></span>
+                            <div class="invalid-feedback">Proszę wybrać sesję treningową.</div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Weight" class="form-label">
+                                <i class="bi bi-bar-chart me-2"></i>Ciężar (kg)
+                            </label>
+                            <input asp-for="Weight" class="form-control" type="number" step="0.5" min="0" required />
+                            <span asp-validation-for="Weight" class="text-danger"></span>
+                            <div class="invalid-feedback">Proszę podać ciężar.</div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Series" class="form-label">
+                                <i class="bi bi-layers me-2"></i>Serie
+                            </label>
+                            <input asp-for="Series" class="form-control" type="number" min="1" required />
+                            <span asp-validation-for="Series" class="text-danger"></span>
+                            <div class="invalid-feedback">Proszę podać liczbę serii.</div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Repetitions" class="form-label">
+                                <i class="bi bi-arrow-repeat me-2"></i>Powtórzenia
+                            </label>
+                            <input asp-for="Repetitions" class="form-control" type="number" min="1" required />
+                            <span asp-validation-for="Repetitions" class="text-danger"></span>
+                            <div class="invalid-feedback">Proszę podać liczbę powtórzeń.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                <i class="bi bi-save me-2"></i>Zapisz zmiany
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Powrót do listy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function () {
+            var form = $('#editForm');
+            var submitButton = $('#submitButton');
+            var errorAlert = $('#errorAlert');
+
+            form.on('submit', function (e) {
+                e.preventDefault();
+
+                if (!form[0].checkValidity()) {
+                    e.stopPropagation();
+                    form.addClass('was-validated');
+                    return;
+                }
+
+                submitButton.prop('disabled', true);
+                var formData = new FormData(form[0]);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.href = response.redirect;
+                        } else {
+                            submitButton.prop('disabled', false);
+                            handleValidationErrors(response.errors);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        submitButton.prop('disabled', false);
+                        errorAlert.html('Wystąpił błąd podczas zapisywania zmian. Spróbuj ponownie.').show();
+                    }
+                });
+            });
+
+            function handleValidationErrors(errors) {
+                form.find('.text-danger').text('');
+                errorAlert.empty().hide();
+                
+                if (typeof errors === 'object' && errors !== null) {
+                    var errorMessages = [];
+                    Object.keys(errors).forEach(function (key) {
+                        var error = errors[key];
+                        if (key === '' || key === 'Error') {
+                            errorMessages.push(error);
+                        } else {
+                            var errorSpan = form.find(`[data-valmsg-for="${key}"]`);
+                            if (errorSpan.length) {
+                                errorSpan.text(error);
+                            } else {
+                                errorMessages.push(error);
+                            }
+                        }
+                    });
+
+                    if (errorMessages.length > 0) {
+                        errorAlert.html(errorMessages.join('<br>')).show();
+                    }
+                }
+            }
+        });
+    </script>
+}
+
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .card-header {
+        border-bottom: none;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+</style>

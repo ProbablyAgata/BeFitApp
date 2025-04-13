@@ -1,0 +1,70 @@
+@model IEnumerable<BeFit.Models.ExerciseType>
+
+@{
+    ViewData["Title"] = "Typy ćwiczeń";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="bi bi-list-check"></i> Typy ćwiczeń</h1>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn gradient-button">
+                <i class="bi bi-plus-circle"></i> Dodaj nowy typ
+            </a>
+        }
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                            <th class="text-end">Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="align-middle">@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td class="text-end">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn gradient-button-sm" title="Szczegóły">
+                                        <i class="bi bi-info-circle"></i>
+                                    </a>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn gradient-button-sm" title="Edytuj">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn gradient-button-sm" title="Usuń">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table {
+        margin-bottom: 0;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        margin-left: 0.25rem;
+    }
+</style>

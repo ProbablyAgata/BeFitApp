@@ -1,0 +1,85 @@
+@model BeFit.Models.TrainingSession
+
+@{
+    ViewData["Title"] = "Usuń sesję treningową";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="bi bi-trash"></i> Usuń sesję treningową
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Data rozpoczęcia</dt>
+                        <dd class="col-sm-8">@Model.StartTime.ToString("dd.MM.yyyy HH:mm")</dd>
+                        <dt class="col-sm-4">Data zakończenia</dt>
+                        <dd class="col-sm-8">@(Model.EndTime.HasValue ? Model.EndTime.Value.ToString("dd.MM.yyyy HH:mm") : "-")</dd>
+                    </dl>
+                    <form asp-action="DeleteConfirmed" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group">
+                            <button type="submit" class="btn gradient-button">
+                                <i class="bi bi-trash me-2"></i>Usuń
+                            </button>
+                            <a asp-action="Index" class="btn gradient-button-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Powrót do listy
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .card-header {
+        border-bottom: none;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .gradient-button {
+        background: linear-gradient(90deg, #dc3545 0%, #f5c6cb 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+    .gradient-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+        color: white;
+    }
+
+    .gradient-button-secondary {
+        background: linear-gradient(90deg, #6c757d 0%, #868e96 100%);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+    .gradient-button-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.2);
+        color: white;
+    }
+</style>
