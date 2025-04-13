@@ -32,23 +32,31 @@ namespace BeFit.Controllers
                 .Select(g => new ExerciseStatViewModel
                 {
                     ExerciseName = g.Key,
-                    Count = g.Count(),
+                    TotalSessions = g.Count(),
                     TotalRepetitions = g.Sum(x => x.Series * x.Repetitions),
-                    AverageWeight = g.Average(x => x.Weight),
-                    MaxWeight = g.Max(x => x.Weight)
+                    AverageWeight = Math.Round(g.Average(x => x.Weight), 1),
+                    MaxWeight = g.Max(x => x.Weight),
+                    LastTrainingDate = g.Max(x => x.TrainingSession.StartTime),
+                    Progress = g.OrderByDescending(x => x.TrainingSession.StartTime)
+                                .Take(2)
+                                .Select(x => (double)x.Weight)
+                                .ToList()
                 })
+                .OrderByDescending(s => s.LastTrainingDate)
                 .ToListAsync();
+
+            // Calculate progress indicators
+            foreach (var stat in stats)
+            {
+                if (stat.Progress.Count >= 2)
+                {
+                    var latest = stat.Progress[0];
+                    var previous = stat.Progress[1];
+                    stat.WeightProgress = latest - previous;
+                }
+            }
 
             return View(stats);
         }
-    }
-
-    public class ExerciseStatViewModel
-    {
-        public string ExerciseName { get; set; }
-        public int Count { get; set; }
-        public int TotalRepetitions { get; set; }
-        public double AverageWeight { get; set; }
-        public int MaxWeight { get; set; }
     }
 }
