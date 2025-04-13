@@ -30,7 +30,7 @@ namespace BeFit.Models
         [Display(Name = "Liczba powtórzeń")]
         public int Repetitions { get; set; }
 
-        // Navigation properties
+        // Właściwości nawigacyjne
         [ForeignKey("ExerciseTypeId")]
         public virtual ExerciseType ExerciseType { get; set; }
 

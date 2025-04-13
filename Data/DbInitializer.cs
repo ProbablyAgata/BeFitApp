@@ -11,11 +11,11 @@ namespace BeFit.Data
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            // Dodaj rolę admina
+            // Dodaj rolę administratora
             if (!await roleManager.RoleExistsAsync("Admin"))
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
 
-            // Dodaj konto admina
+            // Dodaj konto administratora
             var admin = await userManager.FindByEmailAsync("admin@befit.pl");
             if (admin == null)
             {
@@ -29,7 +29,7 @@ namespace BeFit.Data
                 await userManager.AddToRoleAsync(admin, "Admin");
             }
 
-            // Dodaj przykładowe ćwiczenia
+            // Dodaj przykładowe typy ćwiczeń
             if (!context.ExerciseTypes.Any())
             {
                 context.ExerciseTypes.AddRange(

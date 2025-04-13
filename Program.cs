@@ -20,7 +20,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// Configure Kestrel to use HTTP
+// Konfiguracja Kestrel do używania HTTP
 builder.WebHost.UseUrls("http://localhost:5207");
 
 var app = builder.Build();

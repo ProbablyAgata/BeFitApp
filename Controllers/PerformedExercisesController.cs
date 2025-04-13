@@ -25,7 +25,7 @@ namespace BeFit.Controllers
             _logger = logger;
         }
 
-        // GET: PerformedExercises
+        // GET: Przeprowadzone ćwiczenia
         public async Task<IActionResult> Index()
         {
             var userId = _userManager.GetUserId(User);
@@ -39,7 +39,7 @@ namespace BeFit.Controllers
             return View(exercises);
         }
 
-        // GET: PerformedExercises/Details/5
+        // GET: Przeprowadzone ćwiczenia/Szczegóły/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -61,17 +61,17 @@ namespace BeFit.Controllers
             return View(performedExercise);
         }
 
-        // GET: PerformedExercises/Create
+        // GET: Przeprowadzone ćwiczenia/Utwórz
         public async Task<IActionResult> Create()
         {
             var userId = _userManager.GetUserId(User);
             
-            // Get exercise types
+            // Pobierz typy ćwiczeń
             var exerciseTypes = await _context.ExerciseTypes
                 .OrderBy(e => e.Name)
                 .ToListAsync();
             
-            // Get training sessions for the current user
+            // Pobierz sesje treningowe dla aktualnego użytkownika
             var trainingSessions = await _context.TrainingSessions
                 .Where(t => t.UserId == userId)
                 .OrderByDescending(t => t.StartTime)
@@ -96,7 +96,7 @@ namespace BeFit.Controllers
             return View();
         }
 
-        // POST: PerformedExercises/Create
+        // POST: Przeprowadzone ćwiczenia/Utwórz
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] PerformedExercise performedExercise)
@@ -106,10 +106,10 @@ namespace BeFit.Controllers
             _logger.LogInformation("Model state: {@ModelState}", ModelState);
             _logger.LogInformation("Received exercise data: {@PerformedExercise}", performedExercise);
 
-            // Clear any existing model state errors
+            // Wyczyść istniejące błędy stanu modelu
             ModelState.Clear();
 
-            // Manually validate the required fields
+            // Ręczna walidacja wymaganych pól
             if (performedExercise.ExerciseTypeId == 0)
             {
                 ModelState.AddModelError("ExerciseTypeId", "Typ ćwiczenia jest wymagany");
@@ -139,7 +139,7 @@ namespace BeFit.Controllers
             {
                 _logger.LogInformation("Model is valid. Exercise data: {@PerformedExercise}", performedExercise);
 
-                // Verify that the training session belongs to the current user
+                // Sprawdź, czy sesja treningowa należy do aktualnego użytkownika
                 var trainingSession = await _context.TrainingSessions
                     .FirstOrDefaultAsync(t => t.Id == performedExercise.TrainingSessionId && t.UserId == userId);
 
@@ -153,7 +153,7 @@ namespace BeFit.Controllers
                 {
                     try
                     {
-                        // Create a new PerformedExercise with just the necessary properties
+                        // Utwórz nowe Przeprowadzone ćwiczenie z tylko niezbędnymi właściwościami
                         var newExercise = new PerformedExercise
                         {
                             ExerciseTypeId = performedExercise.ExerciseTypeId,
@@ -197,7 +197,7 @@ namespace BeFit.Controllers
                 }
             }
 
-            // If we got here, something went wrong - prepare the view data again
+            // Jeśli dotarliśmy tutaj, coś poszło nie tak - przygotuj ponownie dane widoku
             var exerciseTypes = await _context.ExerciseTypes
                 .OrderBy(e => e.Name)
                 .ToListAsync();
@@ -221,7 +221,7 @@ namespace BeFit.Controllers
             return View(performedExercise);
         }
 
-        // GET: PerformedExercises/Edit/5
+        // GET: Przeprowadzone ćwiczenia/Edytuj/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -262,7 +262,7 @@ namespace BeFit.Controllers
             return View(performedExercise);
         }
 
-        // POST: PerformedExercises/Edit/5
+        // POST: Przeprowadzone ćwiczenia/Edytuj/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [FromForm] PerformedExercise performedExercise)
@@ -275,10 +275,10 @@ namespace BeFit.Controllers
                 return NotFound();
             }
 
-            // Clear existing ModelState to handle manual validation
+            // Wyczyść istniejący ModelState do obsługi ręcznej walidacji
             ModelState.Clear();
 
-            // Manual validation
+            // Ręczna walidacja
             if (performedExercise.ExerciseTypeId <= 0)
             {
                 ModelState.AddModelError("ExerciseTypeId", "Proszę wybrać rodzaj ćwiczenia.");
@@ -312,7 +312,7 @@ namespace BeFit.Controllers
 
             try
             {
-                // Get the existing exercise
+                // Pobierz istniejące ćwiczenie
                 var existingExercise = await _context.PerformedExercises
                     .Include(p => p.TrainingSession)
                     .FirstOrDefaultAsync(p => p.Id == id);
@@ -323,14 +323,14 @@ namespace BeFit.Controllers
                     return NotFound();
                 }
 
-                // Verify ownership
+                // Sprawdź własność
                 if (existingExercise.TrainingSession?.UserId != User.FindFirstValue(ClaimTypes.NameIdentifier))
                 {
                     _logger.LogWarning("Unauthorized access attempt to edit exercise {Id}", id);
                     return Unauthorized();
                 }
 
-                // Verify the training session exists and belongs to the user
+                // Sprawdź, czy sesja treningowa istnieje i należy do użytkownika
                 var trainingSession = await _context.TrainingSessions
                     .FirstOrDefaultAsync(ts => ts.Id == performedExercise.TrainingSessionId);
 
@@ -363,7 +363,7 @@ namespace BeFit.Controllers
                     return View(performedExercise);
                 }
 
-                // Update only the necessary properties
+                // Zaktualizuj tylko niezbędne właściwości
                 existingExercise.ExerciseTypeId = performedExercise.ExerciseTypeId;
                 existingExercise.TrainingSessionId = performedExercise.TrainingSessionId;
                 existingExercise.Weight = performedExercise.Weight;
@@ -397,7 +397,7 @@ namespace BeFit.Controllers
             }
         }
 
-        // GET: PerformedExercises/Delete/5
+        // GET: Przeprowadzone ćwiczenia/Usuń/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -419,7 +419,7 @@ namespace BeFit.Controllers
             return View(performedExercise);
         }
 
-        // POST: PerformedExercises/Delete/5
+        // POST: Przeprowadzone ćwiczenia/Usuń/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
