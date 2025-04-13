@@ -1,121 +1,105 @@
-# BeFit
+# 🏋️‍♀️ BeFit – Aplikacja do zarządzania treningami
 
-BeFit to aplikacja ASP.NET Core MVC do zarządzania treningami siłowymi. Pozwala użytkownikom rejestrować typy ćwiczeń, sesje treningowe, wykonane ćwiczenia i przeglądać statystyki z ostatnich 4 tygodni.
-
-## 🧰 Wymagania
-- [.NET SDK 6.0 lub nowszy](https://dotnet.microsoft.com/en-us/download)
-- Visual Studio Code lub dowolny edytor
-- (opcjonalnie) SQLite jako baza danych lokalna (brak potrzeby instalacji SQL Server)
-
-## 🚀 Uruchomienie projektu
-
-### 1. Sklonuj repozytorium
-```bash
-git clone https://github.com/twoj-login/befit.git
-cd befit
-```
-
-### 2. Zainstaluj pakiety
-```bash
-dotnet restore
-```
-
-### 3. (REKOMENDOWANE) Użycie SQLite zamiast SQL Server
-
-#### 3.1 Zainstaluj pakiet SQLite
-```bash
-dotnet add package Microsoft.EntityFrameworkCore.Sqlite
-```
-
-#### 3.2 W `Program.cs` zamień:
-```csharp
-// builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//     options.UseSqlServer(...));
-```
-na:
-```csharp
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite("Data Source=befit.db"));
-```
-
-#### 3.3 Dodaj SQLite tools (jeśli chcesz podglądać bazę)
-- Zainstaluj np. rozszerzenie **SQLite Viewer** do VS Code lub użyj [DB Browser for SQLite](https://sqlitebrowser.org/)
-
-### 4. Dodaj migrację i stwórz bazę danych
-```bash
-dotnet ef migrations add InitialCreate
-
-dotnet ef database update
-```
-
-### 5. Dodaj dane testowe
-W `Program.cs`, przed `app.Run();`, dodaj:
-```csharp
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    await DbInitializer.Seed(services);
-}
-```
-
-Plik `DbInitializer.cs` powinien zawierać przykładowe dane:
-- 3 typy ćwiczeń: Przysiady, Martwy ciąg, Wyciskanie na ławce
-- Konto admina: `admin@befit.pl` / `Test123!`
-
-### 6. Uruchom projekt
-```bash
-dotnet run
-```
-
-Aplikacja będzie dostępna na:
-```
-https://localhost:5001
-```
-
-## 🧪 Dane testowe do logowania
-- **Email:** `admin@befit.pl`
-- **Hasło:** `Test123!`
-
-## 📂 Moduły aplikacji
-- Typy ćwiczeń – globalna lista ćwiczeń (CRUD dostępny tylko dla administratora)
-- Sesje treningowe – przypisywane do zalogowanego użytkownika
-- Wykonane ćwiczenia – powiązane z sesją i typem ćwiczenia
-- Statystyki – podsumowanie ćwiczeń z ostatnich 4 tygodni
-
-## 📌 Uwagi
-- Wszystkie widoki zawierają polskie etykiety
-- Nawigacja znajduje się w `_Layout.cshtml`
-- Projekt obsługuje rejestrację, logowanie, role (Admin)
+BeFit to aplikacja stworzona w technologii ASP.NET MVC umożliwiająca użytkownikom tworzenie, edytowanie i analizowanie swoich sesji treningowych. Projekt zawiera funkcje zarządzania typami ćwiczeń, sesjami treningowymi oraz statystykami użytkownika.
 
 ---
-**Autor:** [Twoje Imię]  
-**Rok:** 2025  
-**Technologie:** ASP.NET Core MVC, EF Core, Identity, Bootstrap, SQLite
 
+## 📚 Funkcjonalności
 
-// -----------------------------
-// .gitignore dla ASP.NET Core + SQLite
-// -----------------------------
-# .gitignore
-bin/
-obj/
-*.db
-*.db-journal
-.env
-.vscode/
-appsettings.*.json
-secrets.json
-*.user
-*.suo
-*.swp
-.idea/
-.DS_Store
+✅ Rejestracja i logowanie użytkownika  
+✅ Tworzenie i zarządzanie **typami ćwiczeń** (dostępne tylko dla administratora)  
+✅ Tworzenie i zarządzanie **sesjami treningowymi** (widoczne tylko dla zalogowanego użytkownika)  
+✅ Dodawanie ćwiczeń do sesji treningowej  
+✅ Wyświetlanie **statystyk z ostatnich 4 tygodni**:  
+   - suma powtórzeń  
+   - średnie obciążenie  
+   - maksymalne obciążenie
 
-# VS Code
-.vscode/
+---
 
-# Logs
-*.log
+## 🚀 Uruchamianie aplikacji lokalnie
 
-# EF Migrations (opcjonalnie)
-Migrations/
+### Wymagania:
+- Visual Studio 2022
+- .NET 6 SDK lub wyższy
+
+### Krok po kroku:
+
+1. **Sklonuj repozytorium**
+   ```bash
+   git clone https://github.com/ProbablyAgata/BeFitApp.git
+   ```
+
+2. **Otwórz projekt w Visual Studio**  
+   Plik rozwiązania: `BeFitApp.sln`
+
+3. **Wykonaj migrację bazy danych (SQLite)**
+   W konsoli Menedżera pakietów:
+   ```
+   Update-Database
+   ```
+
+4. **Uruchom projekt** (Ctrl + F5)
+
+---
+
+## 🧪 Dane testowe
+
+Po zainstalowaniu aplikacji możesz zalogować się na testowe konto:
+
+```
+Login: admin@befit.pl
+Hasło: Admin123!
+```
+
+Możesz również zarejestrować nowego użytkownika i przetestować aplikację z poziomu zwykłego konta.
+
+---
+
+## 📦 Użyte technologie
+
+- ASP.NET MVC 6
+- Entity Framework Core (SQLite)
+- Identity do zarządzania użytkownikami i rolami
+- Razor Views
+- Bootstrap (UI)
+
+---
+
+## 📸 Zrzuty ekranu
+
+*(opcjonalnie dodaj screeny z widokiem statystyk, sesji i formularza ćwiczenia)*
+
+---
+
+## 🛡️ Bezpieczeństwo
+
+- Autoryzacja i uwierzytelnianie oparte na ASP.NET Identity
+- Dostęp do edycji typów ćwiczeń ograniczony do roli `Admin`
+- Dane widoczne tylko dla właściciela konta
+- Zabezpieczenia CSRF (`[ValidateAntiForgeryToken]`) we wszystkich akcjach POST
+
+---
+
+## 📂 Struktura projektu
+
+```
+BeFitApp/
+│
+├── Controllers/          // Logika aplikacji
+├── Models/               // Klasy danych i walidacje
+├── Views/                // Widoki Razor
+├── Data/                 // Kontekst bazy danych
+├── Migrations/           // Migracje EF Core
+├── wwwroot/              // Style i skrypty
+├── appsettings.json      // Ustawienia aplikacji
+└── Program.cs            // Konfiguracja aplikacji
+```
+
+---
+
+## ✍️ Autor
+
+Projekt wykonany jako część zadania zaliczeniowego.  
+**Autor:** Agata Ochocińska (ProbablyAgata)  
+2025
